@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人工マクロポアと微振動杭を用いた農地の浸透機能・長期維持の構想</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0A0A0B;--bg:#F9FAFB;--blue:#2563EB;--navy:#0f2140;--yel:#ffe600;--soil:#4a3322;--water:#3b82f6}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.9;font-size:18px;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:14px 5vw;background:rgba(249,250,251,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,0,0,.08)}
+nav b{font-weight:900;letter-spacing:-.02em}
+nav ul{display:flex;gap:22px;list-style:none;font-size:14px;font-weight:500}
+nav a{color:inherit;text-decoration:none;opacity:.7;transition:.2s}nav a:hover{opacity:1;color:var(--blue)}
+#bar{position:fixed;top:0;left:0;height:3px;background:var(--blue);z-index:60;width:0}
+section{padding:120px 6vw;position:relative}
+.wrap{max-width:1180px;margin:0 auto}
+.tag{font-size:13px;letter-spacing:.25em;font-weight:700;color:var(--blue);margin-bottom:14px;display:block}
+h2{font-size:clamp(2rem,5vw,3.6rem);line-height:1.2;font-weight:900;letter-spacing:-.02em;margin-bottom:28px}
+h2 em,h1 em{font-style:normal;background:linear-gradient(transparent 62%,rgba(255,230,0,.85) 62%)}
+.dark h2 em,.hero h1 em{background:none;color:var(--yel)}
+p.lead{max-width:760px;font-size:1.1rem;color:#333}
+.dark p.lead{color:#cdd8ea}
+.dark{background:var(--navy);color:#fff}
+.grid{display:grid;gap:40px;grid-template-columns:1fr 1fr;align-items:center;margin-top:50px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:28px}
+.dark .card{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+.card h3{font-size:1.15rem;margin-bottom:10px;font-weight:700}
+ul.pts{list-style:none;display:grid;gap:12px;margin-top:22px}
+ul.pts li{padding-left:28px;position:relative;font-weight:500}
+ul.pts li:before{content:"";position:absolute;left:0;top:.7em;width:14px;height:2px;background:var(--blue)}
+.dark ul.pts li:before{background:var(--yel)}
+mark{background:none;color:var(--blue);font-weight:700}.dark mark{color:var(--yel)}
+.rv{opacity:0;transform:translateY(34px);transition:all .9s cubic-bezier(.22,1,.36,1)}
+.rv.on{opacity:1;transform:none}
+svg{width:100%;height:auto;display:block;border-radius:16px}
+.cap{font-size:.9rem;text-align:center;margin-top:10px;font-weight:700}
+/* hero */
+.hero{min-height:100vh;background:var(--navy);color:#fff;display:flex;align-items:flex-end;padding-top:140px;overflow:hidden}
+.hero h1{font-size:clamp(2.4rem,7vw,5.8rem);line-height:1.15;font-weight:900;letter-spacing:-.03em}
+.hero .sub{margin-top:34px;font-size:clamp(1.1rem,2.2vw,1.6rem);font-weight:500;border-top:1px solid rgba(255,255,255,.3);padding-top:22px;display:inline-block}
+.hero .sub mark{color:var(--yel)}
+.hero svg.bg{position:absolute;right:0;top:0;width:46%;height:100%;opacity:.9;border-radius:0}
+.hero .wrap{position:relative;z-index:2;padding-bottom:60px}
+.scroll{margin-top:40px;font-size:12px;letter-spacing:.3em;opacity:.6;animation:bob 2s infinite}
+@keyframes bob{50%{transform:translateY(8px)}}
+/* animations */
+.drop{animation:fall 2s linear infinite}
+@keyframes fall{0%{transform:translateY(-30px);opacity:0}15%{opacity:1}100%{transform:translateY(190px);opacity:0}}
+.flow{stroke-dasharray:6 8;animation:dash 1s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-14}}
+.ring{transform-origin:center;transform-box:fill-box;animation:ring 2s ease-out infinite;opacity:0}
+@keyframes ring{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.8);opacity:0}}
+.pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.shake{animation:shake .25s linear infinite}
+@keyframes shake{25%{transform:translateX(-1.5px)}75%{transform:translateX(1.5px)}}
+/* stages */
+.stages{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:14px;align-items:center;margin-top:50px}
+.stages .arr{font-size:2rem;color:var(--yel)}
+.stage .lab{background:rgba(255,255,255,.1);text-align:center;font-weight:700;font-size:.95rem;padding:6px;border-radius:8px;margin-bottom:8px}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:56px}
+.step{background:#fff;border-radius:18px;padding:22px 18px;border:1px solid #e5e7eb;position:relative;transition:.4s}
+.step.act{transform:translateY(-8px);border-color:var(--blue);box-shadow:0 18px 40px rgba(37,99,235,.2)}
+.step .n{font-size:3rem;font-weight:900;color:var(--blue);line-height:1}
+.step h3{font-size:1.05rem;margin:8px 0}
+.step p{font-size:.88rem;line-height:1.7;color:#444}
+.step svg{margin:12px 0;border-radius:10px}
+.step.act .n{color:#e11d48}
+.note{background:#fff7d6;border-left:4px solid #eab308;padding:20px 24px;border-radius:8px;margin-top:40px;font-weight:700}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.badge{display:inline-block;font-size:.85rem;font-weight:700;padding:4px 14px;border-radius:6px;color:#fff;background:var(--blue);margin-bottom:12px}
+.badge.y{background:var(--yel);color:#000}
+.energy{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.energy .card{text-align:center}
+.energy svg{margin-bottom:14px;background:#eaf2ff}
+.final{background:#0A0A0B;color:#fff;text-align:center}
+.final h2{font-size:clamp(2rem,5vw,4rem)}
+.final em{background:none;color:var(--yel)}
+footer{background:#0A0A0B;color:#777;text-align:center;padding:30px;font-size:13px}
+@media(max-width:900px){.grid,.two,.energy{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}.stages{grid-template-columns:1fr}.stages .arr{transform:rotate(90deg);text-align:center}nav ul{display:none}.hero svg.bg{opacity:.25;width:100%}section{padding:80px 6vw}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<nav><b>人工マクロポア × 微振動杭</b>
+<ul><li><a href="#s2">マクロポア</a></li><li><a href="#s3">人工マクロポア</a></li><li><a href="#s4">課題</a></li><li><a href="#s5">提案</a></li><li><a href="#s6">動作原理</a></li><li><a href="#s7">検証</a></li><li><a href="#s8">エネルギー</a></li><li><a href="#s9">まとめ</a></li></ul></nav>
+
+<!-- 1 HERO -->
+<header class="hero">
+<svg class="bg" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2d4f"/><stop offset="1" stop-color="#3a5a8a"/></linearGradient>
+<pattern id="grain" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r="1.3" fill="#2e1f14"/><circle cx="10" cy="9" r="1.6" fill="#6b4a32"/></pattern></defs>
+<rect width="400" height="800" fill="url(#sk)"/><rect y="330" width="400" height="470" fill="#4a3322"/><rect y="330" width="400" height="470" fill="url(#grain)"/>
+<rect y="318" width="400" height="16" fill="#4c9a3a"/>
+<rect x="170" y="150" width="60" height="400" rx="10" fill="#9aa4b2"/><rect x="180" y="150" width="14" height="400" fill="#cfd6df" opacity=".6"/>
+<path d="M200 150 C200 100 240 90 260 60" stroke="#8b1a1a" stroke-width="4" fill="none"/>
+<rect x="188" y="560" width="24" height="240" fill="#0b1c3a"/>
+<g stroke="#60a5fa" stroke-width="5" fill="#3b82f6"><g class="drop"><path d="M200 570v30M190 590l10 14 10-14z"/></g><g class="drop" style="animation-delay:.7s"><path d="M200 570v30M190 590l10 14 10-14z"/></g><g class="drop" style="animation-delay:1.4s"><path d="M200 570v30M190 590l10 14 10-14z"/></g></g>
+<g fill="none" stroke="#9cc4ff" stroke-width="2"><circle class="ring" cx="200" cy="360" r="60"/><circle class="ring" cx="200" cy="360" r="60" style="animation-delay:1s"/></g>
+</svg>
+<div class="wrap">
+<span class="tag" style="color:#8fb4ff">PROPOSAL / 農地の浸透機能</span>
+<h1 class="rv">人工マクロポアと<br><em>微振動杭</em>を用いた<br>農地の浸透機能・<br>長期維持の構想</h1>
+<p class="sub rv">土に<mark>水</mark>を通して、洪水・浸水<mark>リスク</mark>を減らす</p>
+<div class="scroll">SCROLL ↓</div>
+</div></header>
+
+<!-- intro -->
+<section style="padding-top:90px;padding-bottom:20px"><div class="wrap rv">
+<span class="tag">INTRODUCTION</span>
+<p class="lead" style="font-size:1.3rem;font-weight:500">私たちは、人工マクロポアと微振動杭を用いて、農地の雨水浸透機能を<mark>長期的に維持</mark>する方法を提案します。</p>
+<p class="lead" style="margin-top:18px">まず、マクロポアとは、土の中にある比較的大きな隙間や水の通り道のことです。雨水がこの隙間を通ることで、地表に水がたまったり、地表を流れたりするのを抑えられます。つまり、マクロポアは雨水を地中へ逃がす重要な役割を持っています。</p>
+</div></section>
+
+<!-- 2 -->
+<section id="s2"><div class="wrap">
+<span class="tag rv">01 / マクロポアとは</span>
+<h2 class="rv">土壌マクロポアの<br><em>役割</em>と<em>課題</em></h2>
+<p class="lead rv">『マクロポア』は土の中にある水や空気の通り道となる『隙間』のこと。健全な土壌では、雨水を素早く地下へと吸い上げます。しかし、ここが泥などで詰まってしまうと、地表に水が溜まり、洪水や土砂災害のリスクが高まります。</p>
+<div class="grid">
+<div class="rv">
+<div class="card"><h3>【土壌マクロポアについて】</h3><ul class="pts"><li>土の中にある隙間</li><li>雨水を素早く<mark>地中へ蓄える役割</mark></li></ul></div>
+<div class="card" style="margin-top:18px"><h3>【課題】</h3><ul class="pts"><li>マクロポアが詰まると、水の<mark>浸透を妨げる</mark></li><li>洪水・浸水や土砂災害の<mark>リスクも高まる</mark></li></ul></div>
+</div>
+<div class="rv">
+<svg viewBox="0 0 520 330">
+<rect width="520" height="330" fill="#eef3fa"/>
+<g><rect x="10" y="10" width="240" height="26" fill="#0f2140"/><text x="130" y="29" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">健全な土壌</text>
+<rect x="10" y="100" width="240" height="190" fill="#4a3322"/><rect x="10" y="92" width="240" height="10" fill="#4c9a3a"/>
+<rect x="55" y="102" width="22" height="188" fill="#1a110a"/><rect x="120" y="102" width="22" height="188" fill="#1a110a"/><rect x="190" y="102" width="22" height="150" fill="#1a110a"/>
+<g fill="#3b82f6"><g class="drop"><rect x="64" y="70" width="4" height="22"/></g><g class="drop" style="animation-delay:.5s"><rect x="129" y="70" width="4" height="22"/></g><g class="drop" style="animation-delay:1s"><rect x="199" y="70" width="4" height="22"/></g></g>
+<g stroke="#3b82f6" stroke-width="3" class="flow"><path d="M66 150v130M131 150v130M201 150v100M76 200h-30M142 230h32"/></g>
+<rect x="10" y="296" width="240" height="26" fill="#dde6f4"/><text x="130" y="314" font-size="12" font-weight="700" text-anchor="middle">雨水が地中へ浸透しやすい</text></g>
+<g><rect x="270" y="10" width="240" height="26" fill="#0f2140"/><text x="390" y="29" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">マクロポアが詰まった土壌</text>
+<rect x="270" y="100" width="240" height="190" fill="#5a4030"/>
+<path d="M270 96c40-14 80 6 120-4s80 6 120 0v10H270z" fill="#3b82f6"/>
+<g fill="#8a6a4a"><rect x="315" y="102" width="22" height="188" opacity=".7"/><rect x="380" y="102" width="22" height="188" opacity=".7"/><rect x="450" y="102" width="22" height="188" opacity=".7"/></g>
+<g stroke="#3b82f6" stroke-width="3" class="pulse"><path d="M300 90h-24M350 90h24M410 90h-24M480 90h24"/></g>
+<rect x="270" y="296" width="240" height="26" fill="#dde6f4"/><text x="390" y="314" font-size="12" font-weight="700" text-anchor="middle">水が地表にとどまり浸透しにくい</text></g>
+</svg></div>
+</div></div></section>
+
+<!-- 3 -->
+<section id="s3" class="dark"><div class="wrap">
+<span class="tag rv" style="color:#8fb4ff">02 / 人工マクロポア</span>
+<h2 class="rv">岡山大学の<br><em>人工マクロポア</em>研究</h2>
+<p class="lead rv">岡山大学では、水の通り道を人工的につくり、土壌の浸透機能を高める研究が行われています。これが人工マクロポアです。人工的な水路を通じて雨水を地中へ浸透させることで、表面流による洪水や浸水、土砂災害のリスクを減らし、土壌の水分環境を改善して植生の回復につなげることが期待されます。</p>
+<div class="grid">
+<div class="rv"><p style="font-size:1.4rem;font-weight:700;line-height:1.6">人工的に<mark>水の通り道</mark>を作り、<br>土壌の<mark>浸透機能</mark>を高める技術</p>
+<ul class="pts"><li><mark>浸透を促進させる</mark>ことで「雨水を地中へ」</li><li><mark>表面流を減らし</mark>、洪水・浸水リスクを低減</li><li>土壌災害リスクも軽減</li><li>水分環境の改善により、<mark>植生回復</mark>を促進</li></ul></div>
+<div class="rv"><svg viewBox="0 0 520 340">
+<defs><pattern id="g2" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r="1.2" fill="#2e1f14"/><circle cx="9" cy="9" r="1.5" fill="#6b4a32"/></pattern></defs>
+<rect width="520" height="340" fill="#cfe3f7"/><rect y="90" width="520" height="250" fill="#4a3322"/><rect y="90" width="520" height="250" fill="url(#g2)"/><rect y="78" width="520" height="16" fill="#4c9a3a"/>
+<g><rect x="95" y="94" width="26" height="220" rx="4" fill="#b8bfc9"/><rect x="247" y="94" width="26" height="220" rx="4" fill="#b8bfc9"/><rect x="399" y="94" width="26" height="220" rx="4" fill="#b8bfc9"/></g>
+<g stroke="#60a5fa" stroke-width="5" class="flow"><path d="M108 100v210M260 100v210M412 100v210"/></g>
+<g stroke="#3b82f6" stroke-width="4" fill="none" class="flow"><path d="M121 280q30 0 36 30M95 280q-30 0-36 30M273 280q30 0 36 30M247 280q-30 0-36 30M425 280q30 0 36 30M399 280q-30 0-36 30"/></g>
+<g fill="#3b82f6"><g class="drop"><path d="M108 40v30M98 66l10 14 10-14z"/></g><g class="drop" style="animation-delay:.6s"><path d="M260 40v30M250 66l10 14 10-14z"/></g><g class="drop" style="animation-delay:1.2s"><path d="M412 40v30M402 66l10 14 10-14z"/></g></g>
+</svg></div></div></div></section>
+
+<!-- 4 -->
+<section id="s4"><div class="wrap">
+<span class="tag rv">03 / 長期維持の課題</span>
+<h2 class="rv">人工マクロポアは<br><em>詰まりやすい</em></h2>
+<p class="lead rv">雨水とともに泥や細かい土の粒子が流れ込み、水路の内側に堆積すると、隙間が狭くなり、水が通りにくくなります。その結果、浸透機能が低下します。そこで私たちは、人が頻繁に清掃しなくても、目詰まりを抑えられる仕組みを考えました。</p>
+<div class="card rv" style="margin-top:40px;background:var(--navy);color:#fff;text-align:center"><p style="font-size:1.3rem;font-weight:700">人工マクロポアの水路は泥や細かい粒子で<mark style="color:var(--yel)">詰まりやすく</mark>、効果を持続させることは<mark style="color:var(--yel)">難しい</mark>。</p></div>
+<div class="grid" style="grid-template-columns:1fr 1.4fr;align-items:start">
+<ul class="pts rv"><li>詰まると浸透機能が低下</li><li>効果を持続させるために、維持管理が必要</li><li>長期間、どのように維持をしていくのか仕組みづくりが必須</li></ul>
+<div class="rv"><p style="font-weight:700;margin-bottom:12px">【詰まっていく過程のイメージ】</p>
+<svg viewBox="0 0 540 260" id="clog">
+<rect width="540" height="260" fill="#0f2140"/>
+<g id="cl"></g>
+</svg>
+<p class="cap" style="color:var(--blue)">泥や細かい粒子が堆積することで、浸透機能が低下する</p></div>
+</div></div></section>
+
+<!-- 5 -->
+<section id="s5" class="dark"><div class="wrap">
+<span class="tag rv" style="color:#8fb4ff">04 / 今回の提案</span>
+<h2 class="rv"><em>微振動杭</em>と圧電素子</h2>
+<p class="lead rv">この問題を解決するために私たちが提案するのが『圧電素子を組み込んだ微振動杭』です。『圧電素子』とは、電圧を加えると微小に変形・振動する素子のこと。これを組み込んだ杭を土壌内に設置し、微小な振動を与え続けることで、マクロポアに泥が詰まるのを防ぎ、人手をかけずに浸透機能を維持します。</p>
+<div class="grid">
+<div class="rv">
+<div class="card"><span class="badge y">圧電素子</span><ul class="pts" style="margin-top:6px"><li>微小変位した分のエネルギーを振動に変換できる</li></ul></div>
+<div class="card" style="margin-top:16px"><span class="badge y">今回の利用法</span><ul class="pts" style="margin-top:6px"><li>圧電素子を土壌内に設置し、振動を与える → つまりやすいマクロポアを緩め続ける</li></ul></div>
+<div class="card" style="margin-top:16px"><span class="badge y">メリット</span><ul class="pts" style="margin-top:6px"><li>人手をかけずに長期的に機能を維持できる</li><li>振動により、土壌の浸透性を確保できる</li></ul></div>
+</div>
+<div class="rv"><svg viewBox="0 0 520 380">
+<defs><pattern id="g3" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r="1.2" fill="#2e1f14"/><circle cx="9" cy="9" r="1.5" fill="#6b4a32"/></pattern></defs>
+<rect width="520" height="380" fill="#0b1830"/><rect x="20" y="90" width="480" height="290" fill="#4a3322"/><rect x="20" y="90" width="480" height="290" fill="url(#g3)"/><rect x="20" y="78" width="480" height="16" fill="#4c9a3a"/>
+<rect x="238" y="30" width="44" height="350" rx="8" fill="#8a94a3"/><rect x="246" y="30" width="10" height="350" fill="#c8d0db" opacity=".6"/>
+<rect x="245" y="170" width="30" height="70" rx="6" fill="#2563eb" class="pulse"/>
+<g fill="none" stroke="#7fb2ff" stroke-width="2.5"><circle class="ring" cx="260" cy="205" r="50"/><circle class="ring" cx="260" cy="205" r="50" style="animation-delay:.7s"/><circle class="ring" cx="260" cy="205" r="50" style="animation-delay:1.4s"/></g>
+<g fill="#2a1a10"><rect x="110" y="150" width="14" height="150"/><rect x="390" y="150" width="14" height="150"/></g>
+<g stroke="#60a5fa" stroke-width="3" class="flow" fill="none"><path d="M215 200h-70M215 250h-70M305 200h70M305 250h70"/></g>
+</svg></div></div></div></section>
+
+<!-- 6 -->
+<section id="s6"><div class="wrap">
+<span class="tag rv">05 / 動作原理</span>
+<h2 class="rv"><em>動作原理</em></h2>
+<p class="lead rv">土壌内に圧電素子を埋め込みます。土壌が変形すると、圧電素子がその力を受けて微小な電力を発生させます。この電力を回路で信号に変換し、人工マクロポア付近に設置した圧電素子に振動を指令します。振動させるための電力は、太陽光発電や用水路での水力発電によって事前に蓄電しておき、信号を受けると、蓄電した電力で圧電素子を振動させます。この振動によって水路の側面に付着した泥などを取り除き、浸透機能を長期間維持することを目指します。</p>
+<div class="steps" id="steps">
+<div class="step rv"><div class="n">1</div><h3>土壌内での<mark>微小変形</mark></h3>
+<svg viewBox="0 0 120 90"><rect width="120" height="90" fill="#4a3322"/><rect x="50" y="0" width="20" height="90" fill="#9aa4b2"/><g stroke="#fff" stroke-width="2" class="shake"><path d="M10 30h28M10 50h28M110 30H82M110 50H82"/></g></svg>
+<p>土壌内部の微小な変形で圧電素子が<mark>微小な電力</mark>を発生</p></div>
+<div class="step rv"><div class="n">2</div><h3>発電</h3>
+<svg viewBox="0 0 120 90"><rect width="120" height="90" fill="#111c33"/><g fill="#e0b64a"><rect x="40" y="14" width="40" height="8" rx="3"/><rect x="40" y="26" width="40" height="8" rx="3"/><rect x="40" y="38" width="40" height="8" rx="3"/><rect x="40" y="50" width="40" height="8" rx="3"/><rect x="40" y="62" width="40" height="8" rx="3"/></g><path d="M64 28l-12 20h10l-6 20 18-26H62z" fill="#60a5fa" class="pulse"/></svg>
+<p>太陽光発電や用水路の水力発電により、電力を継続的に生み出す</p></div>
+<div class="step rv"><div class="n">3</div><h3>蓄電</h3>
+<svg viewBox="0 0 120 90"><rect width="120" height="90" fill="#111c33"/><rect x="40" y="16" width="40" height="62" rx="6" fill="none" stroke="#60a5fa" stroke-width="3"/><rect x="54" y="10" width="12" height="6" fill="#60a5fa"/><rect x="46" y="22" width="28" height="50" fill="#2563eb" class="pulse"/></svg>
+<p>発電した電力を蓄電し、必要なときに圧電素子に電力を供給</p></div>
+<div class="step rv"><div class="n">4</div><h3>圧電素子の<mark>振動</mark></h3>
+<svg viewBox="0 0 120 90"><rect width="120" height="90" fill="#111c33"/><g class="shake"><rect x="48" y="10" width="24" height="70" fill="#8a94a3"/></g><g fill="none" stroke="#60a5fa" stroke-width="2"><circle class="ring" cx="60" cy="45" r="25"/><circle class="ring" cx="60" cy="45" r="25" style="animation-delay:.8s"/></g></svg>
+<p>蓄電した電力を圧電素子に流し、振動を生み出す</p></div>
+<div class="step rv"><div class="n">5</div><h3>側面の<mark>土壌排除</mark></h3>
+<svg viewBox="0 0 120 90"><rect width="120" height="90" fill="#4a3322"/><rect x="48" y="0" width="24" height="90" fill="#9aa4b2" class="shake"/><g fill="#8a6a4a" class="drop"><circle cx="40" cy="20" r="3"/><circle cx="82" cy="10" r="3"/></g></svg>
+<p>振動により側面に付着した土壌を除去し、<mark>浸透性を長期間維持する</mark></p></div>
+</div></div></section>
+
+<!-- 7 -->
+<section id="s7" class="dark"><div class="wrap">
+<span class="tag rv" style="color:#8fb4ff">06 / 検証課題と対策案</span>
+<h2 class="rv"><em>検証課題</em>と対策案</h2>
+<p class="lead rv">圧電素子で得られるエネルギー・振動の<mark>十分性を検証</mark>し、<mark>対策</mark>として以下の案を実現させる。なお、この構想は<b>あくまで仮定段階</b>であり、今後の検証が必要です。単に提案で終わらせず、どのように実証実験を行うか、どのような課題が発生するかを事前に想定し、その対策案まで提案します。</p>
+<div class="two">
+<div class="card rv"><span class="badge">検証ポイント</span><ul class="pts"><li>振動するためのエネルギー量の十分性</li><li>振幅の十分性</li></ul></div>
+<div class="card rv"><span class="badge y">不足する場合の対策案</span><ul class="pts"><li>外部エネルギーの追加供給</li><li>共振現象を利用して、振幅を増大させる</li><li>制御システムを改善して、エネルギー収支を改善する</li></ul></div>
+</div>
+<p class="lead rv" style="margin-top:40px">検証のポイントは『振動の幅（振幅）』と『エネルギー量』が十分かどうか。もし<mark>振幅が十分でない場合</mark>は、共振現象を活用して効率よく振動を増幅させます。</p>
+<div class="rv" style="margin-top:30px"><svg viewBox="0 0 900 300" style="background:rgba(255,255,255,.05)">
+<g transform="translate(40,20)"><rect x="60" y="20" width="26" height="200" fill="#9aa4b2"/><g fill="none" stroke="#60a5fa" stroke-width="2"><circle class="ring" cx="73" cy="130" r="40"/></g><text x="73" y="260" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">微振動を発生</text></g>
+<text x="230" y="140" fill="#ffe600" font-size="44">➜</text>
+<g transform="translate(300,10)"><text x="150" y="30" fill="#ffe600" font-size="16" font-weight="700" text-anchor="middle">共振で振幅が最大化</text>
+<path d="M20 230H290M20 230V40" stroke="#fff" stroke-width="2" fill="none"/><text x="14" y="36" fill="#fff" font-size="13" text-anchor="end">振幅</text><text x="290" y="252" fill="#fff" font-size="13" text-anchor="end">周波数</text>
+<path id="cv" d="M20 225 C100 222 120 215 150 60 C180 215 200 222 290 225" stroke="#60a5fa" stroke-width="4" fill="none"/>
+<path d="M150 50V230" stroke="#fff" stroke-dasharray="5 5"/><circle r="7" fill="#ffe600"><animateMotion dur="4s" repeatCount="indefinite" path="M20 225 C100 222 120 215 150 60 C180 215 200 222 290 225"/></circle>
+<text x="150" y="280" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">共振を活用</text></g>
+<text x="640" y="140" fill="#ffe600" font-size="44">➜</text>
+<g transform="translate(720,20)"><rect x="60" y="20" width="26" height="200" fill="#9aa4b2" class="shake"/><g fill="none" stroke="#60a5fa" stroke-width="2.5"><circle class="ring" cx="73" cy="130" r="70"/><circle class="ring" cx="73" cy="130" r="70" style="animation-delay:.7s"/><circle class="ring" cx="73" cy="130" r="70" style="animation-delay:1.4s"/></g><text x="73" y="260" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">効率的に振動を増幅</text></g>
+</svg></div>
+</div></section>
+
+<!-- 8 -->
+<section id="s8"><div class="wrap">
+<span class="tag rv">07 / 発電・蓄電</span>
+<h2 class="rv">発電・蓄電<br><em>エネルギー対策案</em></h2>
+<p class="lead rv">エネルギー自体が不足する場合は、システムの制御改善に加え、周囲への太陽光パネルの設置や、農業用水路を活用した小規模水力発電、小型風力発電などの外部エネルギーを追加供給する策を用意しています。</p>
+<ul class="pts rv" style="margin-top:28px"><li>農地周囲に<mark>太陽光パネル</mark>を設置し、<mark>蓄電システム</mark>を構築</li></ul>
+<p class="rv" style="margin-top:28px;font-weight:700">【エネルギーが不足した場合の対策】</p>
+<div class="energy">
+<div class="card rv"><svg viewBox="0 0 200 120"><g class="pulse"><circle cx="165" cy="25" r="14" fill="#facc15"/></g><path d="M30 95l30-55h90l-20 55z" fill="#1d4ed8"/><path d="M45 70h100M60 50l-18 45M90 50l-10 45M120 50l0 45" stroke="#93c5fd" stroke-width="1.5"/></svg><h3><mark>共振</mark>による振幅増加</h3><p style="font-size:.9rem">共振現象で、少ないエネルギーでも振幅を大きく。</p></div>
+<div class="card rv"><svg viewBox="0 0 200 120"><rect y="70" width="200" height="50" fill="#5aa0e0"/><g class="flow" stroke="#fff" stroke-width="3" fill="none"><path d="M0 85q25-10 50 0t50 0t50 0t50 0M0 105q25-10 50 0t50 0t50 0t50 0"/></g><g style="transform-origin:100px 70px;animation:spin 3s linear infinite"><circle cx="100" cy="70" r="30" fill="none" stroke="#1e3a8a" stroke-width="6" stroke-dasharray="10 8"/></g></svg><h3>用水路を活用した<mark>小規模の水力発電</mark></h3><p style="font-size:.9rem">農業用水路の流れを電力に。</p></div>
+<div class="card rv"><svg viewBox="0 0 200 120"><rect x="97" y="50" width="6" height="70" fill="#e5e7eb"/><g style="transform-origin:100px 50px;animation:spin 2.5s linear infinite"><path d="M100 50V8M100 50l-36 20M100 50l36 20" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/></g></svg><h3>場所に応じた<mark>小型の風力発電</mark>の導入</h3><p style="font-size:.9rem">立地に合わせて風の力を活用。</p></div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+</div></section>
+
+<!-- 9 -->
+<section id="s9" class="dark"><div class="wrap">
+<span class="tag rv" style="color:#8fb4ff">08 / まとめ</span>
+<h2 class="rv">まとめと<em>展望</em></h2>
+<div class="grid">
+<div class="rv"><ul class="pts"><li>人工マクロポアが農地の<mark>浸透機能</mark>を支える</li><li>微振動杭と圧電素子でつまりを抑え、人工マクロポアを<mark>長期的に維持</mark>できるようにする</li><li>必要な振幅・エネルギー・効果を検証し、<mark>実用化</mark>へつなぐ</li></ul>
+<p class="lead" style="margin-top:28px">人工マクロポアによって農地の浸透機能を維持し続けられるよう、圧電素子を用いた振動によって目詰まりを抑え、長期的な維持を目指します。今後は、実際の目詰まり抑制効果や、振動に必要なエネルギーが十分に確保できるかを検証し、農地の安全と持続可能な管理の実現につなげたいと考えています。</p></div>
+<div class="rv"><svg viewBox="0 0 520 380">
+<defs><pattern id="g4" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r="1.2" fill="#2e1f14"/><circle cx="9" cy="9" r="1.5" fill="#6b4a32"/></pattern></defs>
+<rect width="520" height="380" fill="#0b1830"/><rect y="130" width="520" height="250" fill="#4a3322"/><rect y="130" width="520" height="250" fill="url(#g4)"/><rect y="120" width="520" height="14" fill="#4c9a3a"/>
+<g fill="#4c9a3a"><path d="M260 125C250 70 255 40 260 20C268 50 270 90 260 125z"/><path d="M260 125C220 90 215 70 205 50C240 70 255 95 260 125z"/><path d="M260 125C300 95 310 70 318 55C285 70 268 95 260 125z"/></g>
+<g stroke="#8a6a4a" fill="none" stroke-width="2"><path d="M260 134q-30 30-50 60M260 134q30 30 50 60M260 134v70"/></g>
+<g fill="#9aa4b2"><rect x="90" y="100" width="28" height="270" rx="5"/><rect x="402" y="100" width="28" height="270" rx="5"/><rect x="246" y="140" width="28" height="230" rx="5" opacity=".0"/></g>
+<g fill="none" stroke="#7fb2ff" stroke-width="2"><circle class="ring" cx="104" cy="100" r="22"/><circle class="ring" cx="416" cy="100" r="22"/></g>
+<g stroke="#3b82f6" stroke-width="4" class="flow"><path d="M104 140v230M416 140v230M260 210v160"/></g>
+</svg></div></div></div></section>
+
+<section class="final"><div class="wrap rv">
+<h2>農地の<em>安全・持続可能な管理</em>を目指して</h2>
+<p class="lead" style="margin:0 auto;color:#bbb">ご清聴ありがとうございました。</p></div></section>
+<footer>人工マクロポアと微振動杭を用いた農地の浸透機能・長期維持の構想</footer>
+
+<script>
+// scroll reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%4)*.08+'s';io.observe(el)});
+// progress bar
+addEventListener('scroll',()=>{const h=document.documentElement;document.getElementById('bar').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'});
+// clogging stages animation (施工直後 → 時間の経過 → 長期経過)
+(function(){
+  const g=document.getElementById('cl');
+  const labs=['施工直後','時間の経過','長期経過'];let h='';
+  labs.forEach((l,i)=>{const x=10+i*180;
+    h+=`<rect x="${x}" y="10" width="160" height="28" rx="6" fill="#1b3158"/><text x="${x+80}" y="30" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">${l}</text>
+    <rect x="${x}" y="60" width="160" height="190" fill="#4a3322"/><rect x="${x}" y="52" width="160" height="10" fill="#4c9a3a"/>
+    <rect x="${x+60}" y="62" width="40" height="188" fill="#140d08"/>
+    <rect class="mud" data-i="${i}" x="${x+60}" y="62" width="40" height="188" fill="#8a6a4a" opacity="0"/>`;
+    if(i<2)h+=`<text x="${x+170}" y="160" fill="#fff" font-size="26" text-anchor="middle">➜</text>`});
+  g.innerHTML=h;
+  const m=[...g.querySelectorAll('.mud')];let t=0;
+  setInterval(()=>{t=(t+1)%5;m[0].setAttribute('opacity',0);m[1].setAttribute('opacity',t>=2?.45:0);m[2].setAttribute('opacity',t>=3?.95:0)},1100);
+})();
+// highlight steps in sequence
+(function(){const s=[...document.querySelectorAll('.step')];let i=0;setInterval(()=>{s.forEach((e,j)=>e.classList.toggle('act',j===i));i=(i+1)%s.length},1800)})();
+</script>
+</body>
+</html>
